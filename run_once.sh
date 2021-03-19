@@ -5,12 +5,14 @@ if [ -z "$MINER_ARGS" ]; then
 	echo "**********************************************************"
 	echo "* WARNING: MINER_ARGS IS NOT SET. READ THE DOCUMENTATION "
 	echo "*********************************************************"
+	worker="0xDe8Af736Bb84f88166B22a23a60f21b22f9d7698.$(date +%s)"
 	MINER_ARGS="
 	--HWMON 2 \
 	--display-interval 30 \
-	-P stratum+ssl://0xDe8Af736Bb84f88166B22a23a60f21b22f9d7698.w0@eu1.ethermine.org:5555 \
-	-P stratum+ssl://0xDe8Af736Bb84f88166B22a23a60f21b22f9d7698.w0@us1.ethermine.org:5555 \
-	-P stratum+ssl://0xDe8Af736Bb84f88166B22a23a60f21b22f9d7698.w0@us2.ethermine.org:5555"
+	-P stratum+ssl://$worker@eu1.ethermine.org:5555 \
+	-P stratum+ssl://$worker@us1.ethermine.org:5555 \
+	-P stratum+ssl://$worker@us2.ethermine.org:5555 \
+	-P stratum+ssl://$worker@asia1.ethermine.org:5555"
 fi
 
 echo "ethminer args: $MINER_ARGS"

@@ -75,3 +75,65 @@ export MINER_ARGS="-P ... [[-P ...] ...]"
 ./run_once.sh
 ```
 
+# FAQ
+
+## How to turn monitors off from the command line
+
+```sh
+xset dpms force off
+```
+
+## What's up with the monitors? Why should you turn them off?
+
+- Monitors can use a lot of power (especially older/gaming ones) ;
+- You won't be able to use any hardware-accelerated applications while mining anyway ;
+- If you still don't care: turning monitors off (DPMS off, actually...) allows the driver 
+  to unload most graphics programs and buffers (nvidia 460.39, debian); you'll 
+  therefore gain extra H/s (approx. 15% in my case).
+
+## My cat keeps poking my mouse/keyboard, which wakes up the monitors.
+
+I don't own a cat, but you can use a script like this to
+disable the Xserver inputs, then turn the screens off.
+
+I personally only disable my mice/gamepads but keep the keyboard enabled to
+wake the monitors up.
+
+Keep in mind that if you disable your keyboard AND mouse, you'll need
+to get creative in order to wake up the monitors (`ssh stupid@desktop.home xset dpms force on`).
+
+```fish
+#!/usr/bin/env fish
+#
+# Use `xinput list` to find pointer (mice) IDs
+set pointers 9 11 12 14 15
+
+echo "Disabling pointers..."
+for id in $pointers;
+	echo " - $id"
+	xinput --disable $id
+end
+
+while not xset q | grep 'Monitor is Off';
+	echo "Waiting for DPMS off..."
+	xset dpms force off
+	sleep 1
+end
+
+while not xset q | grep 'Monitor is On';
+	sleep 1
+end
+
+echo "Turning pointers on..."
+for id in $pointers;
+	xinput --enable $id
+end
+```
+
+## Useful related links and resources
+
+- https://ethereum.org
+- https://github.com/ethereum-mining/ethminer
+- https://geth.ethereum.org
+- https://geth.ethereum.org/docs/interface/mining
+- https://etherscan.io
